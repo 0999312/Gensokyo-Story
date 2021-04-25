@@ -1,0 +1,117 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/Fonts/m5x7_16.tres" type="DynamicFont" id=1]
+[ext_resource path="res://addons/GameTemplate/Autoload/TimeLaber.gd" type="Script" id=2]
+[ext_resource path="res://addons/GameTemplate/Autoload/DateLabel.gd" type="Script" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+onready var gui: = $CanvasLayer/GUI
+onready var timelabel: = $CanvasLayer/GUI/MarginContainer/VBoxContainer/Top/TimeLabel
+onready var datelabel: = $CanvasLayer/GUI/MarginContainer/VBoxContainer/Top/DateLabel
+
+var visible: = false setget set_visible
+
+func _ready()->void:
+	gui.visible = visible
+	timelabel.visible = visible
+	datelabel.visible = visible
+
+func set_visible(value: bool)->void:
+	visible = value
+	gui.visible = value
+	timelabel.visible = value
+	datelabel.visible = value
+"
+
+[sub_resource type="ParticlesMaterial" id=2]
+lifetime_randomness = 0.3
+emission_shape = 2
+emission_box_extents = Vector3( 160.087, 1, 1 )
+flag_disable_z = true
+gravity = Vector3( -25, 98, 0 )
+initial_velocity = 10.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 90.0
+linear_accel_random = 1.0
+angle = 135.0
+angle_random = 1.0
+color = Color( 0.25098, 0.337255, 0.878431, 1 )
+
+[node name="Hud" type="Node"]
+script = SubResource( 1 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="RainingEffect" type="Particles2D" parent="CanvasLayer"]
+visible = false
+position = Vector2( 160, 7 )
+amount = 650
+lifetime = 1.5
+speed_scale = 2.0
+process_material = SubResource( 2 )
+
+[node name="GUI" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/GUI"]
+visible = false
+margin_right = 320.0
+margin_bottom = 180.0
+color = Color( 0, 0, 0, 0.0784314 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/GUI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/GUI/MarginContainer"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 316.0
+margin_bottom = 176.0
+mouse_filter = 2
+
+[node name="Top" type="HBoxContainer" parent="CanvasLayer/GUI/MarginContainer/VBoxContainer"]
+margin_right = 312.0
+margin_bottom = 13.0
+
+[node name="DateLabel" type="Label" parent="CanvasLayer/GUI/MarginContainer/VBoxContainer/Top"]
+margin_right = 25.0
+margin_bottom = 13.0
+custom_fonts/font = ExtResource( 1 )
+text = "Date:"
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/GUI/MarginContainer/VBoxContainer/Top"]
+margin_left = 29.0
+margin_right = 54.0
+margin_bottom = 13.0
+custom_fonts/font = ExtResource( 1 )
+text = "Time:"
+align = 2
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
